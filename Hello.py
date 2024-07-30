@@ -1,51 +1,75 @@
-# Copyright (c) Streamlit Inc. (2018-2022) Snowflake Inc. (2022)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import streamlit as st
-from streamlit.logger import get_logger
+import pandas as pd
+import matplotlib.pyplot as plt
 
-LOGGER = get_logger(__name__)
+# Carregar o dataset
+df = pd.read_csv('PEDE_PASSOS_DATASET_FIAP.csv', delimiter=';')
 
+# Funções de filtragem e limpeza de dados
+def filter_columns(df, filters: list):
+    selected_columns = [True] * len(df.columns)  # Inicializa todas as colunas como True
+    for index, column in enumerate(df.columns):
+        if any(filter in column for filter in filters): selected_columns[index] = False
+    return df[df.columns[selected_columns]]
 
+def cleaning_dataset(df):
+    _df = df.dropna(subset=df.columns.difference(['NOME']), how='all')  # Remove linhas com todas as colunas NaN, exceto a coluna NOME
+    _df = _df[~_df.isna().all(axis=1)]  # Remove linhas com apenas NaN, se tiver algum dado na linha não remove
+    return _df
+
+# Aplicar a filtragem e limpeza para os dados de 2020, 2021 e 2022
+df_2020 = filter_columns(df, ['2021', '2022'])
+df_2020 = cleaning_dataset(df_2020)
+df_2021 = filter_columns(df, ['2020', '2022'])
+df_2021 = cleaning_dataset(df_2021)
+df_2022 = filter_columns(df, ['2020', '2021'])
+df_2022 = cleaning_dataset(df_2022)
+
+# Contar a quantidade de alunos por ano
+students_count = {
+    '2020': len(df_2020),
+    '2021': len(df_2021),
+    '2022': len(df_2022)
+}
+
+# Converter para DataFrame para visualização
+students_df = pd.DataFrame(list(students_count.items()), columns=['Year', 'Number of Students'])
+
+# Função principal para a página inicial do Streamlit
 def run():
     st.set_page_config(
-        page_title="Hello",
-        page_icon="👋",
+        page_title="Passos Mágicos ✨",
+        page_icon="📊",
     )
 
-    st.write("# Welcome to Streamlit! 👋")
+    st.write("# Bem-vindo ao Datathon Passos Mágicos! ✨")
 
-    st.sidebar.success("Select a demo above.")
+    st.sidebar.success("Selecione uma demonstração acima. 🚀")
 
     st.markdown(
         """
-        Streamlit is an open-source app framework built specifically for
-        Machine Learning and Data Science projects.
-        **👈 Select a demo from the sidebar** to see some examples
-        of what Streamlit can do!
-        ### Want to learn more?
-        - Check out [streamlit.io](https://streamlit.io)
-        - Jump into our [documentation](https://docs.streamlit.io)
-        - Ask a question in our [community
-          forums](https://discuss.streamlit.io)
-        ### See more complex demos
-        - Use a neural net to [analyze the Udacity Self-driving Car Image
-          Dataset](https://github.com/streamlit/demo-self-driving)
-        - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
+        A ONG **Passos Mágicos** é dedicada a transformar vidas através da educação e do engajamento comunitário. 🌟
+        Nosso objetivo é fornecer um ambiente acolhedor e estimulante para jovens de todas as idades, 
+        promovendo o desenvolvimento acadêmico e pessoal. 📚💡
+
+        **👈 Selecione uma demonstração na barra lateral** para ver alguns exemplos do que podemos fazer com dados!
+        
+        ### Quer saber mais?
+        - Visite nosso [site](https://passosmagicos.org.br/)
+        - Explore nossa [documentação](https://passosmagicos.org.br/impacto-e-transparencia/)
+        - Faça uma pergunta em nossos [fóruns da comunidade](https://passosmagicos.org.br/contato/)
     """
     )
 
+    st.write("## Quantidade de Alunos ao Longo do Tempo 📈")
+    
+    # Plotar o gráfico
+    fig, ax = plt.subplots()
+    ax.plot(students_df['Year'], students_df['Number of Students'], marker='o', linestyle='-', color='b')
+    ax.set_xlabel('Ano')
+    ax.set_ylabel('Número de Alunos')
+    ax.set_title('Número de Alunos ao Longo do Tempo')
+    st.pyplot(fig)
 
 if __name__ == "__main__":
     run()
