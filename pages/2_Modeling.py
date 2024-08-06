@@ -1,97 +1,96 @@
 import streamlit as st
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-from sklearn.svm import SVR
-from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+import joblib
 
 # Configurar a página do Streamlit
 st.set_page_config(
-    page_title="Modelo Preditivo de IPV 📈",
+    page_title="Modelo Preditivo do Ponto de Virada 📈",
     page_icon="🤖",
 )
 
 def run():
-    st.write("# Treinamento de Modelo para Prever IPV, INDE, PEDRA e PONTO_VIRADA 📈")
+    st.write("# Treinamento de Modelo para Prever Ponto de Virada 📈")
 
     st.sidebar.success("Selecione uma demonstração acima. 🚀")
 
     st.markdown(
         '''
-        Nesta página, vamos utilizar os dados de performance anteriores para treinar modelos que preveem os valores de IPV, INDE, PEDRA e PONTO_VIRADA de 2022.
-        Podemos replicar e retreinar estes modelos para dados mais atuais, como usar dados de 2022 e 2023 para prever os valores de 2024. 🚀
+        Como vimos anteriormente, valores passados são totalmente influentes ao ponto de virada, nessa página iremos mostrar como um modelo
+        treinado usando esses valores, pode ser aplicado de forma eficiente para prever se um aluno atingirá ou não o ponto de virada. 🚀
         '''
     )
 
     # Carregar o dataset final merged
     df = pd.read_csv('Final_Merged_DataFrame.csv')
 
+    # Remover nulos na coluna target
+    df.dropna(subset=['PONTO_VIRADA_2022'], inplace=True)
+
     # Converter colunas relevantes para numérico, tratando valores de string
     label_encoders = {}
     for column in df.columns:
+        # Remover nulos antes de codificar
+        df[column].dropna(inplace=True)
         if df[column].dtype == 'object':
             label_encoders[column] = LabelEncoder()
             df[column] = label_encoders[column].fit_transform(df[column])
         else:
             df[column] = pd.to_numeric(df[column], errors='coerce')
 
+    # Verificar se o target é binário
+    unique_targets = df['PONTO_VIRADA_2022'].unique()
+    if len(unique_targets) > 2:
+        st.warning("O target 'PONTO_VIRADA_2022' contém mais de duas classes. Verifique os dados.")
+
     # Selecionar colunas de performance para treino
-    performance_columns = ['INDE_2020', 'PEDRA_2020', 'IAA_2020', 'IEG_2020', 'IPS_2020', 'IDA_2020', 'IPP_2020', 'IPV_2020', 'IAN_2020', 
-                           'PEDRA_2021', 'INDE_2021', 'IAA_2021', 'IEG_2021', 'IPS_2021', 'IDA_2021', 'IPP_2021', 'IPV_2021', 'IAN_2021']
+    performance_columns = [
+        'PEDRA_2021', 'INDE_2021', 'IAA_2021', 'IEG_2021', 'IPS_2021', 
+        'IDA_2021', 'IPP_2021', 'IPV_2021', 'IAN_2021'
+    ]
 
-    targets = ['IPV_2022', 'INDE_2022', 'PEDRA_2022', 'PONTO_VIRADA_2022']
+    target = 'PONTO_VIRADA_2022'
+    st.markdown("## Modelo de predição de Ponto de Virada")
 
-    for target in targets:
-        st.markdown(f"## Treinamento de Modelo para {target}")
+    # Remover linhas com valores ausentes nas colunas selecionadas
+    df_performance = df.dropna(subset=performance_columns + [target])
 
-        # Remover linhas com valores ausentes nas colunas selecionadas
-        df_performance = df.dropna(subset=performance_columns + [target])
+    X = df_performance[performance_columns]
+    y = df_performance[target]
 
-        X = df_performance[performance_columns]
-        y = df_performance[target]
+    # Dividir os dados em conjuntos de treino e teste
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-        # Dividir os dados em conjuntos de treino e teste
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    # Inicializar e treinar o modelo de Gradient Boosting
+    model = GradientBoostingClassifier(random_state=42)
+    model.fit(X_train, y_train)
 
-        # Treinar vários modelos e avaliar o desempenho
-        models = {
-            "Linear Regression": LinearRegression(),
-            "Random Forest": RandomForestRegressor(random_state=42),
-            "Gradient Boosting": GradientBoostingRegressor(random_state=42),
-            "Support Vector Regressor": SVR()
-        }
+    # Prever e avaliar o desempenho
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred, average='binary', zero_division=1)
+    recall = recall_score(y_test, y_pred, average='binary', zero_division=1)
+    f1 = f1_score(y_test, y_pred, average='binary', zero_division=1)
 
-        best_model_name = None
-        best_model = None
-        best_r2 = -float('inf')
-        best_mse = float('inf')
+    # Exibir métricas de desempenho
+    st.write(f"### Gradient Boosting")
+    st.write(f"**Acurácia:** {accuracy:.4f}")
+    st.write(f"**Precisão:** {precision:.4f}")
+    st.write(f"**Revocação:** {recall:.4f}")
+    st.write(f"**F1 Score:** {f1:.4f}")
 
-        for name, model in models.items():
-            model.fit(X_train, y_train)
-            y_pred = model.predict(X_test)
-            mse = mean_squared_error(y_test, y_pred)
-            r2 = r2_score(y_test, y_pred)
-            st.write(f"### {name}")
-            st.write(f"**Erro Quadrático Médio (MSE):** {mse}")
-            st.write(f"**Coeficiente de Determinação (R²):** {r2}")
-            if r2 > best_r2:
-                best_r2 = r2
-                best_mse = mse
-                best_model_name = name
-                best_model = model
+    # Salvar o modelo treinado
+    joblib.dump(model, 'gradient_boosting_model.pkl')
 
-        st.write(f"## Melhor Modelo para {target}: {best_model_name}")
-        st.write(f"**Erro Quadrático Médio (MSE):** {best_mse}")
-        st.write(f"**Coeficiente de Determinação (R²):** {best_r2}")
-
-        st.markdown(
-            '''
-            Podemos observar que as performances anteriores são variáveis importantes para prever os valores dos alunos.
-            Os modelos treinados podem ser utilizados para prever valores futuros com base em dados mais recentes.
-            '''
-        )
+    st.markdown(
+        '''
+        Aqui temos um exemplo de um modelo e de sua performance na previsão do Ponto de Virada dos alunos, 
+        na próxima página iremos explorar esse modelo e colocar ele pra uso com dados inputados manualmente. 
+        '''
+    )
 
 if __name__ == "__main__":
     run()

@@ -9,7 +9,8 @@ df = pd.read_csv('PEDE_PASSOS_DATASET_FIAP.csv', delimiter=';')
 def filter_columns(df, filters: list):
     selected_columns = [True] * len(df.columns)  # Inicializa todas as colunas como True
     for index, column in enumerate(df.columns):
-        if any(filter in column for filter in filters): selected_columns[index] = False
+        if any(filter in column for filter in filters): 
+            selected_columns[index] = False
     return df[df.columns[selected_columns]]
 
 def cleaning_dataset(df):
@@ -63,12 +64,17 @@ def run():
 
     st.write("## Quantidade de Alunos ao Longo do Tempo 📈")
     
-    # Plotar o gráfico
+    # Plotar o gráfico de barras
     fig, ax = plt.subplots()
-    ax.plot(students_df['Year'], students_df['Number of Students'], marker='o', linestyle='-', color='b')
+    ax.bar(students_df['Year'], students_df['Number of Students'], color='skyblue')
     ax.set_xlabel('Ano')
     ax.set_ylabel('Número de Alunos')
-    ax.set_title('Número de Alunos ao Longo do Tempo')
+    ax.set_title('Número de Alunos por Ano')
+    
+    # Adicionar os valores no topo de cada barra
+    for i, v in enumerate(students_df['Number of Students']):
+        ax.text(i, v + 5, str(v), ha='center', va='bottom', fontweight='bold')
+    
     st.pyplot(fig)
 
 if __name__ == "__main__":
