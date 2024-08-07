@@ -154,6 +154,27 @@ def run():
     ax.set_title('Quantidade de alunos que atingiram o Ponto de Virada por Ano')
     st.pyplot(fig)
 
+    # Adicionar Resumo da Análise
+    st.markdown("## Análise de Resultados")
+
+    st.markdown("""
+    A análise dos indicadores educacionais nos anos de 2020, 2021 e 2022 revelou várias tendências significativas nos padrões de ensino e aprendizado.
+
+    1. **Indicador de Adequação de Nível (IAN)**: Em 2021, o **IAN** teve uma queda em comparação a 2020 devido a pandemia e ao fato de muitos alunos não terem acesso aos novos meios de estudo. Entretanto, em 2022, o **IAN** caiu novamente, refletindo a descontinuidade de programas de suporte e a persistência de desigualdades no acesso a recursos educacionais.
+
+    2. **Indicador de Desempenho Acadêmico (IDA)**: Observamos uma queda no **IDA** de 2020 para 2021, causada por interrupções no ensino e desafios no ensino remoto. No entanto, houve uma recuperação em 2022, impulsionada pelo retorno ao ensino presencial e por programas de recuperação acadêmica que abordaram as lacunas de aprendizado.
+
+    3. **Indicador de Engajamento (IEG)**: O **IEG** mostrou uma queda em 2021 devido à fadiga do ensino remoto e à falta de interação social. Em 2022, o engajamento começou a subir novamente, graças ao retorno das interações presenciais e à implementação de abordagens híbridas que combinaram métodos presenciais e online.
+
+    4. **Indicador de Ponto de Virada (IPV)**: Este indicador refletiu mudanças significativas nas práticas educacionais, com um ponto de virada importante em 2021, quando as instituições tiveram que adaptar-se rapidamente às novas realidades impostas pela pandemia, implementando tecnologias inovadoras e ajustando políticas educacionais.
+
+    5. **Indicador Psicopedagógico (IPP)**: O **IPP** aumentou de 2020 para 2021, devido ao aumento do suporte psicopedagógico e intervenções personalizadas. No entanto, esse indicador caiu em 2022, quando muitos programas psicopedagógicos foram descontinuados e os recursos foram realocados.
+
+    6. **Indicador Psicossocial (IPS)**: O **IPS** teve um aumento contínuo, refletindo o foco ampliado em saúde mental e suporte psicossocial. Os programas de bem-estar e saúde mental foram integrados ao currículo escolar, proporcionando suporte constante aos alunos em tempos de transição.
+
+    Esta análise destacou a resiliência e adaptação de instituições como a Passos Mágicos aos desafios impostos pela pandemia, bem como as áreas que ainda necessitam de atenção contínua para melhorar a experiência educacional e os resultados dos alunos.
+    """)
+
 if __name__ == "__main__":
     run()
 

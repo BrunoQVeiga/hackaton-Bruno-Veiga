@@ -1,10 +1,11 @@
 import streamlit as st
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegressor
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, mean_absolute_error, r2_score
+from sklearn.preprocessing import LabelEncoder
 import joblib
+import matplotlib.pyplot as plt
 
 # Configurar a página do Streamlit
 st.set_page_config(
@@ -19,8 +20,9 @@ def run():
 
     st.markdown(
         '''
-        Como vimos anteriormente, valores passados são totalmente influentes ao ponto de virada, nessa página iremos mostrar como um modelo
-        treinado usando esses valores, pode ser aplicado de forma eficiente para prever se um aluno atingirá ou não o ponto de virada. 🚀
+        Como vimos anteriormente, valores de anos anteriores são totalmente influentes ao ponto de virada e as demais variáveis, nessa página iremos mostrar
+        a análise de performance de um modelo treinado com esses dados. Já na página seguinte, colocaremos em prática esse modelo e faremos juntos, previsões.
+        Prevendo assim, se com determinadas notas, um aluno atingirá ou não o ponto de virada. 🚀
         '''
     )
 
@@ -87,8 +89,50 @@ def run():
 
     st.markdown(
         '''
-        Aqui temos um exemplo de um modelo e de sua performance na previsão do Ponto de Virada dos alunos, 
+        Aqui temos performance de um modelo treinado para prever o Ponto de Virada dos alunos, 
         na próxima página iremos explorar esse modelo e colocar ele pra uso com dados inputados manualmente. 
+        '''
+    )
+
+    st.markdown("## Modelo de Regressão para prever INDE_2022")
+
+    # Remover nulos na coluna target
+    df.dropna(subset=['INDE_2022'], inplace=True)
+
+    target_regression = 'INDE_2022'
+
+    # Remover linhas com valores ausentes nas colunas selecionadas
+    df_performance_regression = df.dropna(subset=performance_columns + [target_regression])
+
+    X_regression = df_performance_regression[performance_columns]
+    y_regression = df_performance_regression[target_regression]
+
+    # Dividir os dados em conjuntos de treino e teste
+    X_train_regression, X_test_regression, y_train_regression, y_test_regression = train_test_split(X_regression, y_regression, test_size=0.2, random_state=42)
+
+    # Inicializar e treinar o modelo de Gradient Boosting para regressão
+    model_regression = GradientBoostingRegressor(random_state=42)
+    model_regression.fit(X_train_regression, y_train_regression)
+
+    # Prever e avaliar o desempenho
+    y_pred_regression = model_regression.predict(X_test_regression)
+    mae = mean_absolute_error(y_test_regression, y_pred_regression)
+    r2 = r2_score(y_test_regression, y_pred_regression)
+    wape = 1 - (mae / y_test_regression.mean())
+
+    # Exibir métricas de desempenho
+    st.write(f"### Gradient Boosting - Regressão")
+    st.write(f"**MAE:** {mae:.4f}")
+    st.write(f"**R² Score:** {r2:.4f}")
+    st.write(f"**1-WAPE:** {wape:.4f}")
+
+    # Salvar o modelo treinado
+    joblib.dump(model_regression, 'gradient_boosting_model_regression.pkl')
+
+    st.markdown(
+        '''
+        Aqui temos a performance de um modelo treinado para prever o INDE_2022 dos alunos. Assim como o modelo anterior, vamos por esse em prática
+        na página seguinte.  
         '''
     )
 

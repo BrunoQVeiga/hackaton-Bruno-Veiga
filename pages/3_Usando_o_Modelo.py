@@ -20,6 +20,7 @@ def run():
 
     # Carregar o modelo treinado
     model = joblib.load('gradient_boosting_model.pkl')
+    model_regression = joblib.load('gradient_boosting_model_regression.pkl')
 
     # Carregar o dataset original para pegar os valores máximos
     df = pd.read_csv('Final_Merged_DataFrame.csv')
@@ -89,6 +90,28 @@ def run():
         st.write(f"Probabilidade de Não: {prediction_proba[0][0]:.2%}")
         st.write(f"Probabilidade de Sim: {prediction_proba[0][1]:.2%}")
 
+        # Fazer a previsão
+        prediction_inde = model_regression.predict(input_df)
+
+        inde_value = prediction_inde[0]
+        if 2.405 <= inde_value < 5.506:
+            pedra = "Quartzo"
+        elif 5.506 <= inde_value < 6.868:
+            pedra = "Ágata"
+        elif 6.868 <= inde_value < 8.230:
+            pedra = "Ametista"
+        elif 8.230 <= inde_value <= 9.294:
+            pedra = "Topázio"
+        else:
+            pedra = "Fora dos intervalos definidos"
+
+        # Exibir o resultado da previsão
+        st.write(f"### Valor Previsto de INDE: {inde_value:.2f}")
+        if inde_value > 6.868:
+            st.success(f"O aluno está previso para ser classificado na pedra: {pedra}")
+        else: 
+            st.warning(f"O aluno está previso para ser classificado na pedra: {pedra}")
+        
 if __name__ == "__main__":
     run()
 

@@ -39,8 +39,7 @@ def run():
             df[column] = pd.to_numeric(df[column], errors='coerce')
 
     # Listas de colunas para análise
-    performance_columns = ['INDE_2020', 'PEDRA_2020', 'IAA_2020', 'IEG_2020', 'IPS_2020', 'IDA_2020', 'IPP_2020', 'IPV_2020', 'IAN_2020', 
-                           'PEDRA_2021', 'INDE_2021', 'IAA_2021', 'IEG_2021', 'IPS_2021', 'IDA_2021', 'IPP_2021', 'IPV_2021', 'IAN_2021']
+    performance_columns = ['PEDRA_2021', 'INDE_2021', 'IAA_2021', 'IEG_2021', 'IPS_2021', 'IDA_2021', 'IPP_2021', 'IPV_2021', 'IAN_2021']
 
     # Verificar a presença de IPV_2022 e outras colunas nas listas
     df['IPV_2022'] = pd.to_numeric(df['IPV_2022'], errors='coerce')
@@ -49,7 +48,7 @@ def run():
     # Calcular correlações de performance anterior
     performance_corr_matrix = df[performance_columns + ['IPV_2022']].corr()
     performance_corr_with_ipv_2022 = performance_corr_matrix['IPV_2022'].drop('IPV_2022', errors='ignore').abs()
-    top3_performance_corr = performance_corr_with_ipv_2022.sort_values(ascending=False).head(3)
+    top3_performance_corr = performance_corr_with_ipv_2022.sort_values(ascending=False).head(5)
 
     # Plotar a matriz de correlação de performance anterior
     st.markdown("### Matriz de Correlação de Performance Anterior")
@@ -58,22 +57,22 @@ def run():
     plt.title('Matriz de Correlação de Performance Anterior com IPV_2022')
     st.pyplot(plt)
 
-    st.write("Top 3 correlações de performance anterior com IPV_2022:", top3_performance_corr)
+    st.write("Top 5 correlações de performance anterior com IPV_2022:", top3_performance_corr)
 
     # Calcular correlações de INDE_2022
     inde_corr_matrix = df[performance_columns + ['INDE_2022']].corr()
     inde_corr_with_inde_2022 = inde_corr_matrix['INDE_2022'].drop('INDE_2022', errors='ignore').abs()
-    top3_inde_corr = inde_corr_with_inde_2022.sort_values(ascending=False).head(3)
+    top3_inde_corr = inde_corr_with_inde_2022.sort_values(ascending=False).head(5)
 
     # Calcular correlações de PEDRA_2022
     pedra_corr_matrix = df[performance_columns + ['PEDRA_2022']].corr()
     pedra_corr_with_pedra_2022 = pedra_corr_matrix['PEDRA_2022'].drop('PEDRA_2022', errors='ignore').abs()
-    top3_pedra_corr = pedra_corr_with_pedra_2022.sort_values(ascending=False).head(3)
+    top3_pedra_corr = pedra_corr_with_pedra_2022.sort_values(ascending=False).head(5)
 
     # Calcular correlações de PONTO_VIRADA_2022
     ponto_virada_corr_matrix = df[performance_columns + ['PONTO_VIRADA_2022']].corr()
     ponto_virada_corr_with_ponto_virada_2022 = ponto_virada_corr_matrix['PONTO_VIRADA_2022'].drop('PONTO_VIRADA_2022', errors='ignore').abs()
-    top3_ponto_virada_corr = ponto_virada_corr_with_ponto_virada_2022.sort_values(ascending=False).head(3)
+    top3_ponto_virada_corr = ponto_virada_corr_with_ponto_virada_2022.sort_values(ascending=False).head(5)
 
     # Plotar a matriz de correlação de INDE_2022
     st.markdown("### Matriz de Correlação de INDE_2022")
@@ -82,7 +81,7 @@ def run():
     plt.title('Matriz de Correlação de INDE_2022')
     st.pyplot(plt)
 
-    st.write("Top 3 correlações de INDE_2022:", top3_inde_corr)
+    st.write("Top 5 correlações de INDE_2022:", top3_inde_corr)
 
     # Plotar a matriz de correlação de PEDRA_2022
     st.markdown("### Matriz de Correlação de PEDRA_2022")
@@ -91,7 +90,7 @@ def run():
     plt.title('Matriz de Correlação de PEDRA_2022')
     st.pyplot(plt)
 
-    st.write("Top 3 correlações de PEDRA_2022:", top3_pedra_corr)
+    st.write("Top 5 correlações de PEDRA_2022:", top3_pedra_corr)
 
     # Plotar a matriz de correlação de PONTO_VIRADA_2022
     st.markdown("### Matriz de Correlação de PONTO_VIRADA_2022")
@@ -100,7 +99,7 @@ def run():
     plt.title('Matriz de Correlação de PONTO_VIRADA_2022')
     st.pyplot(plt)
 
-    st.write("Top 3 correlações de PONTO_VIRADA_2022:", top3_ponto_virada_corr)
+    st.write("Top 5 correlações de PONTO_VIRADA_2022:", top3_ponto_virada_corr)
 
     # Adicionar uma seção de conclusão
     st.markdown("## Conclusão")
