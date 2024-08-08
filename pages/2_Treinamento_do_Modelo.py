@@ -49,19 +49,22 @@ def run():
         st.warning("O target 'PONTO_VIRADA_2022' contém mais de duas classes. Verifique os dados.")
 
     # Selecionar colunas de performance para treino
-    performance_columns = [
-        'PEDRA_2021', 'INDE_2021', 'IAA_2021', 'IEG_2021', 'IPS_2021', 
-        'IDA_2021', 'IPP_2021', 'IPV_2021', 'IAN_2021'
-    ]
+    performance_columns_class = [
+        'PEDRA_2021', 'IAA_2021', 'IEG_2021', 'IPS_2021', 
+        'IDA_2021', 'IPP_2021', 'IPV_2021']
+    
+    performance_columns_regress = [
+    'INDE_2021', 'IAA_2021', 'IEG_2021', 'IAN_2021', 
+    'IDA_2021', 'IPP_2021', 'IPV_2021']
 
     target = 'PONTO_VIRADA_2022'
     st.markdown("## Modelo de predição de Ponto de Virada")
 
     # Remover linhas com valores ausentes nas colunas selecionadas
-    df_performance = df.dropna(subset=performance_columns + [target])
+    df_performance_class = df.dropna(subset=performance_columns_class + [target])
 
-    X = df_performance[performance_columns]
-    y = df_performance[target]
+    X = df_performance_class[performance_columns_class]
+    y = df_performance_class[target]
 
     # Dividir os dados em conjuntos de treino e teste
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -81,8 +84,6 @@ def run():
     st.write(f"### Gradient Boosting")
     st.write(f"**Acurácia:** {accuracy:.4f}")
     st.write(f"**Precisão:** {precision:.4f}")
-    st.write(f"**Revocação:** {recall:.4f}")
-    st.write(f"**F1 Score:** {f1:.4f}")
 
     # Salvar o modelo treinado
     joblib.dump(model, 'gradient_boosting_model.pkl')
@@ -102,9 +103,9 @@ def run():
     target_regression = 'INDE_2022'
 
     # Remover linhas com valores ausentes nas colunas selecionadas
-    df_performance_regression = df.dropna(subset=performance_columns + [target_regression])
+    df_performance_regression = df.dropna(subset=performance_columns_regress + [target_regression])
 
-    X_regression = df_performance_regression[performance_columns]
+    X_regression = df_performance_regression[performance_columns_regress]
     y_regression = df_performance_regression[target_regression]
 
     # Dividir os dados em conjuntos de treino e teste

@@ -63,6 +63,11 @@ def run():
     )
 
     st.write("## Quantidade de Alunos ao Longo do Tempo 📈")
+
+    st.markdown("""
+    Durante essa análise vamos não só avaliar a quantidade de alunos ao longo do tempo, como também identificar padrões nos indicadores de desenvolvimento, 
+    desenvolver modelos preditivos e colocar eles em prática.
+    """)
     
     # Plotar o gráfico de barras
     fig, ax = plt.subplots()

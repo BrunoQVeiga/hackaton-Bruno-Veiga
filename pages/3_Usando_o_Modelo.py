@@ -31,6 +31,14 @@ def run():
         'IDA_2021', 'IPP_2021', 'IPV_2021', 'IAN_2021'
     ]
 
+    performance_columns_class = [
+        'PEDRA_2021', 'IAA_2021', 'IEG_2021', 'IPS_2021', 
+        'IDA_2021', 'IPP_2021', 'IPV_2021']
+    
+    performance_columns_regress = [
+    'INDE_2021', 'IAA_2021', 'IEG_2021', 'IAN_2021', 
+    'IDA_2021', 'IPP_2021', 'IPV_2021']
+
     for col in cols_to_numeric:
         df[col] = pd.to_numeric(df[col], errors='coerce')
 
@@ -76,8 +84,8 @@ def run():
         input_df = pd.DataFrame([input_params])
 
         # Fazer a previsão
-        prediction = model.predict(input_df)
-        prediction_proba = model.predict_proba(input_df)
+        prediction = model.predict(input_df[performance_columns_class])
+        prediction_proba = model.predict_proba(input_df[performance_columns_class])
 
         # Exibir o resultado da previsão
         if prediction[0] == 1:
@@ -91,7 +99,7 @@ def run():
         st.write(f"Probabilidade de Sim: {prediction_proba[0][1]:.2%}")
 
         # Fazer a previsão
-        prediction_inde = model_regression.predict(input_df)
+        prediction_inde = model_regression.predict(input_df[performance_columns_regress])
 
         inde_value = prediction_inde[0]
         if 2.405 <= inde_value < 5.506:
