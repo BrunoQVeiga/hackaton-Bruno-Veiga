@@ -14,15 +14,15 @@ st.set_page_config(
 )
 
 def run():
-    st.write("# Treinamento de Modelo para Prever Ponto de Virada 📈")
+    st.write("# Treinamento de Modelo para Prever Ponto de Virada e INDE 📈")
 
     st.sidebar.success("Selecione uma demonstração acima. 🚀")
 
     st.markdown(
         '''
         Como vimos anteriormente, valores de anos anteriores são totalmente influentes ao ponto de virada e as demais variáveis, nessa página iremos mostrar
-        a análise de performance de um modelo treinado com esses dados. Já na página seguinte, colocaremos em prática esse modelo e faremos juntos, previsões.
-        Prevendo assim, se com determinadas notas, um aluno atingirá ou não o ponto de virada. 🚀
+        a análise de performance de dois modelos treinado com as variáveis que vimos ser influente na análise de correlação.
+        Já na página seguinte, colocaremos em prática esse modelo e faremos juntos, previsões. Prevendo assim, se com determinadas notas, um aluno atingirá ou não o ponto de virada e em qual PEDRA ele se classificará. 🚀
         '''
     )
 
@@ -58,7 +58,7 @@ def run():
     'IDA_2021', 'IPP_2021', 'IPV_2021']
 
     target = 'PONTO_VIRADA_2022'
-    st.markdown("## Modelo de predição de Ponto de Virada")
+    st.markdown("## Modelo de Classificação que prevê se haverá Ponto de Virada")
 
     # Remover linhas com valores ausentes nas colunas selecionadas
     df_performance_class = df.dropna(subset=performance_columns_class + [target])
@@ -95,7 +95,7 @@ def run():
         '''
     )
 
-    st.markdown("## Modelo de Regressão para prever INDE_2022")
+    st.markdown("## Modelo de Regressão que prevê o INDE e a futura PEDRA")
 
     # Remover nulos na coluna target
     df.dropna(subset=['INDE_2022'], inplace=True)
@@ -124,15 +124,14 @@ def run():
     # Exibir métricas de desempenho
     st.write(f"### Gradient Boosting - Regressão")
     st.write(f"**MAE:** {mae:.4f}")
-    st.write(f"**R² Score:** {r2:.4f}")
-    st.write(f"**1-WAPE:** {wape:.4f}")
+    st.write(f"**Acurácia (1-WAPE):** {wape:.4f}")
 
     # Salvar o modelo treinado
     joblib.dump(model_regression, 'gradient_boosting_model_regression.pkl')
 
     st.markdown(
         '''
-        Aqui temos a performance de um modelo treinado para prever o INDE_2022 dos alunos. Assim como o modelo anterior, vamos por esse em prática
+        Aqui temos a performance de um modelo treinado para prever o INDE dos alunos. Assim como o modelo anterior, vamos por esse em prática
         na página seguinte.  
         '''
     )

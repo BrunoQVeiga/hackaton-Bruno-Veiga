@@ -51,13 +51,13 @@ def run():
     top3_performance_corr = performance_corr_with_ipv_2022.sort_values(ascending=False).head(7)
 
     # Plotar a matriz de correlação de performance anterior
-    st.markdown("### Matriz de Correlação de Performance Anterior")
+    st.markdown("### Matriz de Correlação de Performance do ano anterior com o IPV de 2022")
     plt.figure(figsize=(15, 10))
     sns.heatmap(performance_corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1)
-    plt.title('Matriz de Correlação de Performance Anterior com IPV_2022')
+    plt.title('Matriz de Correlação de IPV 2022')
     st.pyplot(plt)
 
-    st.write("Top 7 correlações de performance anterior com IPV_2022:", top3_performance_corr)
+    st.write("Top 7 correlações de performance anterior com IPV 2022:", top3_performance_corr)
 
     # Calcular correlações de INDE_2022
     inde_corr_matrix = df[performance_columns + ['INDE_2022']].corr()
@@ -75,31 +75,31 @@ def run():
     top3_ponto_virada_corr = ponto_virada_corr_with_ponto_virada_2022.sort_values(ascending=False).head(7)
 
     # Plotar a matriz de correlação de INDE_2022
-    st.markdown("### Matriz de Correlação de INDE_2022")
+    st.markdown("### Matriz de Correlação de Performances do ano anterior com o INDE de 2022")
     plt.figure(figsize=(15, 10))
     sns.heatmap(inde_corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1)
-    plt.title('Matriz de Correlação de INDE_2022')
+    plt.title('Matriz de Correlação de INDE 2022')
     st.pyplot(plt)
 
-    st.write("Top 7 correlações de INDE_2022:", top3_inde_corr)
+    st.write("Top 7 correlações de performance anterior com INDE 2022:", top3_inde_corr)
 
     # Plotar a matriz de correlação de PEDRA_2022
-    st.markdown("### Matriz de Correlação de PEDRA_2022")
+    st.markdown("### Matriz de Correlação de Performances do ano anterior com a PEDRA de 2022")
     plt.figure(figsize=(15, 10))
     sns.heatmap(pedra_corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1)
-    plt.title('Matriz de Correlação de PEDRA_2022')
+    plt.title('Matriz de Correlação de PEDRA 2022')
     st.pyplot(plt)
 
-    st.write("Top 7 correlações de PEDRA_2022:", top3_pedra_corr)
+    st.write("Top 7 correlações de performance anterior com PEDRA 2022:", top3_pedra_corr)
 
     # Plotar a matriz de correlação de PONTO_VIRADA_2022
-    st.markdown("### Matriz de Correlação de PONTO_VIRADA_2022")
+    st.markdown("### Matriz de Correlação de Performance do ano anterior com o PONTO de VIRADA de 2022")
     plt.figure(figsize=(15, 10))
     sns.heatmap(ponto_virada_corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1)
-    plt.title('Matriz de Correlação de PONTO_VIRADA_2022')
+    plt.title('Matriz de Correlação de PONTO VIRADA 2022')
     st.pyplot(plt)
 
-    st.write("Top 7 correlações de PONTO_VIRADA_2022:", top3_ponto_virada_corr)
+    st.write("Top 7 correlações de performance anterior com PONTO VIRADA 2022:", top3_ponto_virada_corr)
 
     # Adicionar uma seção de conclusão
     st.markdown("## Conclusão")
