@@ -67,15 +67,15 @@ def run():
 
     # Definir os parâmetros de entrada com base nos valores min (0) e max calculados
     input_params = {
-        'PEDRA_2021': st.selectbox('PEDRA 2021', options=[(0, 'Quartzo'), (1, 'Ágata'), (2, 'Ametista'), (3, 'Topázio')], format_func=lambda x: x[1])[0],
-        'INDE_2021': st.number_input('INDE 2021', min_value=0.0, max_value=col_max['INDE_2021'], step=0.01),
-        'IAA_2021': st.number_input('IAA 2021', min_value=0.0, max_value=col_max['IAA_2021'], step=0.01),
-        'IEG_2021': st.number_input('IEG 2021', min_value=0.0, max_value=col_max['IEG_2021'], step=0.01),
-        'IPS_2021': st.number_input('IPS 2021', min_value=0.0, max_value=col_max['IPS_2021'], step=0.01),
-        'IDA_2021': st.number_input('IDA 2021', min_value=0.0, max_value=col_max['IDA_2021'], step=0.01),
-        'IPP_2021': st.number_input('IPP 2021', min_value=0.0, max_value=col_max['IPP_2021'], step=0.01),
-        'IPV_2021': st.number_input('IPV 2021', min_value=0.0, max_value=col_max['IPV_2021'], step=0.01),
-        'IAN_2021': st.number_input('IAN 2021', min_value=0.0, max_value=col_max['IAN_2021'], step=0.01)
+        'PEDRA_2021': st.selectbox('PEDRA', options=[(0, 'Quartzo'), (1, 'Ágata'), (2, 'Ametista'), (3, 'Topázio')], format_func=lambda x: x[1])[0],
+        'INDE_2021': st.number_input('INDE', min_value=0.0, max_value=col_max['INDE_2021'], step=0.01),
+        'IAA_2021': st.number_input('IAA', min_value=0.0, max_value=col_max['IAA_2021'], step=0.01),
+        'IEG_2021': st.number_input('IEG', min_value=0.0, max_value=col_max['IEG_2021'], step=0.01),
+        'IPS_2021': st.number_input('IPS', min_value=0.0, max_value=col_max['IPS_2021'], step=0.01),
+        'IDA_2021': st.number_input('IDA', min_value=0.0, max_value=col_max['IDA_2021'], step=0.01),
+        'IPP_2021': st.number_input('IPP', min_value=0.0, max_value=col_max['IPP_2021'], step=0.01),
+        'IPV_2021': st.number_input('IPV', min_value=0.0, max_value=col_max['IPV_2021'], step=0.01),
+        'IAN_2021': st.number_input('IAN', min_value=0.0, max_value=col_max['IAN_2021'], step=0.01)
     }
 
     # Botão para executar a previsão

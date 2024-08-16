@@ -83,7 +83,6 @@ def run():
     # Exibir métricas de desempenho
     st.write(f"### Gradient Boosting")
     st.write(f"**Acurácia:** {accuracy:.4f}")
-    st.write(f"**Precisão:** {precision:.4f}")
 
     # Salvar o modelo treinado
     joblib.dump(model, 'gradient_boosting_model.pkl')
