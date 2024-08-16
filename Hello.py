@@ -58,7 +58,7 @@ def run():
         ### Quer saber mais?
         - Visite nosso [site](https://passosmagicos.org.br/)
         - Explore nossa [documentação](https://passosmagicos.org.br/impacto-e-transparencia/)
-        - Faça uma pergunta em nossos [fóruns da comunidade](https://passosmagicos.org.br/contato/)
+        - Faça uma pergunta em nossos [canais de comunicação](https://passosmagicos.org.br/contato/)
     """
     )
 
